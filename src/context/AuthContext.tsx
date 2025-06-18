@@ -22,12 +22,12 @@ export default function AuthWrapper({
   const redirected = useRef(false);
 
   useEffect(() => {
-    if (pathname === "/login") {
-      console.log("smdjknkn")
-      setLoading(false);
-      return;
-    }
-    loadUser();
+    // if (pathname === "/login") {
+    //   console.log("smdjknkn")
+    //   setLoading(false);
+    //   return;
+    // }
+    // loadUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -58,9 +58,9 @@ export default function AuthWrapper({
   };
 
   // Show loader until loading is finished or redirected
-  if (loading && !redirected.current) {
-    return <Loader />;
-  }
+  // if (loading && !redirected.current) {
+  //   return <Loader />;
+  // }
   
   return <>{children}</>;
 }
