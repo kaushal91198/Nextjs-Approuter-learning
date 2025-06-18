@@ -17,8 +17,7 @@ const userSlice = createSlice({
             state.isAuthenticated = true;
         },
         removeUser(
-            state: UserState,
-            action: PayloadAction<{ id: number }>
+            state: UserState
         ) {
             state.user = null;
             state.isAuthenticated = false;

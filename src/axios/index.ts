@@ -33,6 +33,7 @@ export async function apiCall(config: AxiosRequestConfig) {
     withCredentials: true,
   });
   try {
+    console.log("api call function")
     const res = await sendRequest(axiosInstance, config)
     return res.data;
 
@@ -46,8 +47,11 @@ export async function apiCall(config: AxiosRequestConfig) {
           break;
         case 401:
           try {
+            console.log("first call")
             await generateAccessToken(axiosInstance);
+            console.log("second call")
             const res = await sendRequest(axiosInstance, config)
+            console.log("third call")
             return res.data;
           } catch (error) {
             message = "Unauthorized: Please log in.";

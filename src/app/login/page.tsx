@@ -35,12 +35,9 @@ const Login = () => {
     }
   });
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="bg-gray-50 p-8 rounded-lg shadow-2xl w-full max-w-md transform hover:scale-105 transition transform duration-500 ease-in-out">
-        <h1 className="text-3xl font-semibold mb-6 text-gray-800">
-          Welcome Back
-        </h1>
-
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-md">
+        <h1 className="text-2xl font-semibold mb-6 text-center">Sign in</h1>
         <form className="flex flex-col gap-5" onSubmit={handleLogin}>
           <Input<LoginFormFields>
             name="email"
@@ -68,16 +65,8 @@ const Login = () => {
             Log in
           </Button>
         </form>
-
-        {/* <p className="text-gray-500 mt-4">
-          Don’t have an account?{" "}
-          <a href="#" className="text-blue-500 font-semibold">
-            Signup here
-          </a>
-          .
-        </p> */}
       </div>
-    </main>
+    </div>
   );
 };
 
