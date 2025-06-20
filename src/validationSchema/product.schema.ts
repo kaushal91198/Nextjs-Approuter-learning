@@ -11,7 +11,7 @@ export const productSchema = yup
     description: yup.string().required(PracticeSchemaError.description),
     price: yup.number().required(PracticeSchemaError.price),
     offer_price: yup.number().required(PracticeSchemaError.offer_price),
-    category_id: yup.number().required(PracticeSchemaError.category_id),
+    category_id: yup.string().required(PracticeSchemaError.category_id),
     images: yup
       .mixed<File | File[]>()
       .required(PracticeSchemaError.image)

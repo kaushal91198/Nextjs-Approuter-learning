@@ -3,6 +3,6 @@ export type ProductFormFields = {
     description: string;
     price: number;
     offer_price: number;
-    category_id: number;
+    category_id: string;
     images: File | File[];
 };

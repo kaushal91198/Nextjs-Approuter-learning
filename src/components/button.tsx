@@ -8,7 +8,7 @@ interface ButtonProps {
   varient?: "white" | undefined;
   type?: "button" | "submit" | "reset" | undefined;
   onlyDisable?: boolean;
-  loader?: JSX.Element;
+  loader?: boolean;
   bigButton?: boolean;
   btnRef?: any;
   style?: any;
@@ -29,8 +29,13 @@ const Button = (props: ButtonProps) => {
           ${props.onlyDisable ? "cursor-not-allowed" : ""}
       `}
         >
-          {props.loader}
-          {props.children}
+          <div className="flex justify-between items-center">
+            {props.loader && props.onlyDisable ? (
+              <div className="loader mr-2 w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+            ) : (
+              props.children
+            )}
+          </div>
         </button>
       </div>
     </>

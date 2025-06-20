@@ -1,7 +1,7 @@
 
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { NEXT_PUBLIC_API_URL } from "../config";
-import { AUTH_API_BASE_PATH } from "@/constant/apiEndPoint.constant";
+import { NEXT_PUBLIC_API_BASE_URL, NEXT_PUBLIC_API_VERSION } from "../config";
+import { AUTH_API_BASE_PATH, AUTH_PORT } from "@/constant/apiEndPoint.constant";
 
 export const requestTypes = {
   POST: "POST",
@@ -10,9 +10,10 @@ export const requestTypes = {
 };
 
 
-async function sendRequest(axiosInstance: AxiosInstance, config: AxiosRequestConfig) {
+async function sendRequest(axiosInstance: AxiosInstance, config: AxiosRequestConfig, Service: string) {
+  console.log(`${NEXT_PUBLIC_API_BASE_URL}:${Service}${NEXT_PUBLIC_API_VERSION}${config.url}`)
   return await axiosInstance.request({
-    url: NEXT_PUBLIC_API_URL + config.url,
+    url: `${NEXT_PUBLIC_API_BASE_URL}:${Service}${NEXT_PUBLIC_API_VERSION}${config.url}`,
     method: config.method,
     data: config.data,
     params: config.params,
@@ -24,17 +25,17 @@ async function generateAccessToken(axiosInstance: AxiosInstance) {
   await sendRequest(axiosInstance, {
     method: requestTypes.GET,
     url: `${AUTH_API_BASE_PATH}/refresh-token`,
-  });
+  }, AUTH_PORT);
 }
 
 
-export async function apiCall(config: AxiosRequestConfig) {
+export async function apiCall(config: AxiosRequestConfig, Service: string) {
   const axiosInstance = axios.create({
     withCredentials: true,
   });
   try {
     console.log("api call function")
-    const res = await sendRequest(axiosInstance, config)
+    const res = await sendRequest(axiosInstance, config, Service)
     return res.data;
 
   } catch (error: any) {
@@ -50,7 +51,7 @@ export async function apiCall(config: AxiosRequestConfig) {
             console.log("first call")
             await generateAccessToken(axiosInstance);
             console.log("second call")
-            const res = await sendRequest(axiosInstance, config)
+            const res = await sendRequest(axiosInstance, config, Service)
             console.log("third call")
             return res.data;
           } catch (error) {
@@ -74,6 +75,7 @@ export async function apiCall(config: AxiosRequestConfig) {
     } else if (error.request) {
       throw new Error("Network Error: No response received from the server.");
     } else {
+      console.log(error)
       throw new Error("Something went wrong.");
     }
   }

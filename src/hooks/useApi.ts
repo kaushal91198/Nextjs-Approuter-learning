@@ -3,7 +3,7 @@
 import { apiCall } from "@/axios";
 import { useState } from "react";
 
-const useApi = (config = {}) => {
+const useApi = (Service: string, config = {}) => {
   const [state, setState] = useState({ loading: false, error: null, data: null });
 
   const makeApiCall = (additionalConfig = {}) => {
@@ -14,7 +14,7 @@ const useApi = (config = {}) => {
     }));
 
     return new Promise((resolve, reject) => {
-      apiCall({ ...config, ...additionalConfig })
+      apiCall({ ...config, ...additionalConfig }, Service)
         .then((res) => {
           setState((old) => ({
             ...old,

@@ -1,7 +1,5 @@
 "use client";
-import React, { useState } from "react";
 import { assets } from "@/assets/assets";
-import Image from "next/image";
 import Input from "@/components/input";
 import { ProductFormFields } from "./types";
 import { useForm } from "react-hook-form";
@@ -10,6 +8,9 @@ import { productSchema } from "@/validationSchema/product.schema";
 import CustomSelect from "@/components/CustomSelect";
 import TextArea from "@/components/TextArea";
 import FileUpload from "@/components/FileUpload";
+import { useProduct, getCategory } from "./hooks/useProduct";
+import { useEffect } from "react";
+import Button from "@/components/button";
 
 const AddProduct = () => {
   const {
@@ -27,9 +28,32 @@ const AddProduct = () => {
     },
   });
   const formValues = watch();
+  const { addProduct, loading: addProductLoader } = useProduct();
+  const {
+    getCategories,
+    loading: categoryLoader,
+    data: categoryData,
+  } = getCategory();
+
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   const handleProduct = handleSubmit(async (value: ProductFormFields) => {
     try {
+      let formData = new FormData();
+      Object.entries(value).forEach(([key, value]) => {
+        if (Array.isArray(value) && value[0] && value[0] instanceof File) {
+          for (const file of value) {
+            formData.append(key, file);
+          }
+        } else {
+          formData.append(key, value);
+        }
+      });
+      await addProduct(formData);
+      console.log(value, "DSkbfhjdsbbdjskbjb");
+      // const formData = new FormData()
     } catch (error) {
       console.log(error);
     }
@@ -40,6 +64,8 @@ const AddProduct = () => {
     images.splice(imgIndex, 1);
     setValue("images", images);
   };
+
+  console.log(categoryData, "jhbbvhjvb");
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
       <form onSubmit={handleProduct} className="md:p-10 p-4 space-y-5 max-w-lg">
@@ -52,7 +78,7 @@ const AddProduct = () => {
             register={register}
             error={errors.name}
             placeholder="Product Name"
-            type="email"
+            type="text"
             parentClass="mb-30px last:mb-0"
             inputClass="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
           />
@@ -101,10 +127,10 @@ const AddProduct = () => {
               register={register}
               error={errors.category_id}
               parentClass="mb-30px last:mb-0"
-              options={[1, 2, 3, 4].map((author: any) => {
+              options={(categoryData?.data || []).map((category: any) => {
                 return {
-                  value: author,
-                  label: author,
+                  value: category._id,
+                  label: category.name,
                 };
               })}
               control={control}
@@ -138,12 +164,14 @@ const AddProduct = () => {
             />
           </div>
         </div>
-        <button
+        <Button
           type="submit"
-          className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded"
+          classname="px-8 py-2.5 bg-orange-600 text-white font-medium rounded"
+          onlyDisable={addProductLoader}
+          loader={true}
         >
-          ADD
-        </button>
+          Add Products
+        </Button>
       </form>
       {/* <Footer /> */}
     </div>

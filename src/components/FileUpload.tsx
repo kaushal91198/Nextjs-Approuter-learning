@@ -23,6 +23,43 @@ interface FileUploadProps<TForm extends FieldValues> {
   accept?: string;
 }
 
+interface showImageProps {
+  imgClass: string;
+  removeImage?: (index: number) => void;
+  file: File;
+  imgIndex: number;
+}
+
+const ShowImage = ({
+  removeImage,
+  file,
+  imgIndex,
+  imgClass,
+}: showImageProps) => {
+  return (
+    <div className="relative w-24 h-24 rounded overflow-hidden border border-gray-200">
+      <Image
+        src={URL.createObjectURL(file)}
+        alt={`Image ${imgIndex + 1}`}
+        width={100}
+        height={100}
+        className={`object-cover w-full h-full ${imgClass}`}
+      />
+      {removeImage && (
+        <Button
+          type="button"
+          onClickHandler={() => {
+            removeImage(imgIndex);
+          }}
+          classname="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center hover:bg-red-600"
+        >
+          ×
+        </Button>
+      )}
+    </div>
+  );
+};
+
 const FileUpload = <TForm extends Record<string, unknown>>({
   name,
   parentClass,
@@ -30,7 +67,7 @@ const FileUpload = <TForm extends Record<string, unknown>>({
   control,
   error,
   register,
-  maxFiles=1,
+  maxFiles = 1,
   value,
   imgClass,
   removeImage,
@@ -70,54 +107,24 @@ const FileUpload = <TForm extends Record<string, unknown>>({
               {value &&
                 (Array.isArray(value) ? (
                   value.map((file: any, index: number) => (
-                    <div
-                      key={index}
-                      className="relative w-24 h-24 rounded overflow-hidden border border-gray-200"
-                    >
-                      <Image
-                        src={URL.createObjectURL(file)}
-                        alt={`Image ${index + 1}`}
-                        width={100}
-                        height={100}
-                        className={`object-cover w-full h-full ${imgClass}`}
-                      />
-                      {removeImage && (
-                        <Button
-                          type="button"
-                          onClickHandler={() => {
-                            removeImage(index);
-                          }}
-                          classname="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center hover:bg-red-600"
-                        >
-                          ×
-                        </Button>
-                      )}
-                    </div>
+                    <ShowImage
+                      imgClass={imgClass}
+                      removeImage={removeImage}
+                      imgIndex={index}
+                      file={file}
+                    />
                   ))
                 ) : (
                   <div className="relative w-24 h-24 rounded overflow-hidden border border-gray-200">
-                    <Image
-                      src={URL.createObjectURL(value)}
-                      alt="Uploaded file"
-                      width={100}
-                      height={100}
-                      className={`object-cover w-full h-full ${imgClass}`}
+                    <ShowImage
+                      imgClass={imgClass}
+                      removeImage={removeImage}
+                      imgIndex={0}
+                      file={value}
                     />
-                    {removeImage && (
-                      <Button
-                        type="button"
-                        onClickHandler={() => {
-                          removeImage(0);
-                        }}
-                        classname="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs font-bold flex items-center justify-center hover:bg-red-600"
-                      >
-                        ×
-                      </Button>
-                    )}
                   </div>
                 ))}
 
-              {/* Plus upload button */}
               {(!Array.isArray(value) || value.length < maxFiles) && (
                 <Button
                   type="button"
@@ -129,7 +136,6 @@ const FileUpload = <TForm extends Record<string, unknown>>({
               )}
             </div>
 
-            {/* Hidden native file input */}
             <input
               {...register(name)}
               ref={inputRef}

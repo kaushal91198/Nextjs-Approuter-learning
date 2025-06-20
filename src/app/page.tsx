@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import { apiCall, requestTypes } from "@/axios";
-import { AUTH_API_BASE_PATH } from "@/constant/apiEndPoint.constant";
+import { AUTH_API_BASE_PATH, AUTH_PORT } from "@/constant/apiEndPoint.constant";
 import { removeUser } from "@/redux/slices/userSlice";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -18,10 +18,13 @@ export default function DashboardPage() {
 
   const handleLogout = async () => {
     try {
-      await apiCall({
-        method: requestTypes.GET,
-        url: `${AUTH_API_BASE_PATH}/logout`,
-      });
+      await apiCall(
+        {
+          method: requestTypes.GET,
+          url: `${AUTH_API_BASE_PATH}/logout`,
+        },
+        AUTH_PORT
+      );
       dispatch(removeUser());
       router.push("/login");
     } catch (err) {

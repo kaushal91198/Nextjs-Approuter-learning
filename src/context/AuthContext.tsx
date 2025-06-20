@@ -2,7 +2,7 @@
 
 import Loader from "@/app/loading";
 import { apiCall, requestTypes } from "@/axios";
-import { AUTH_API_BASE_PATH } from "@/constant/apiEndPoint.constant";
+import { AUTH_API_BASE_PATH, AUTH_PORT } from "@/constant/apiEndPoint.constant";
 import { setUser } from "@/redux/slices/userSlice";
 import { AppDispatch, RootState, useAppDispatch } from "@/redux/store";
 import { usePathname, useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ export default function AuthWrapper({
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const redirected = useRef(false);
 
   useEffect(() => {
@@ -34,12 +34,15 @@ export default function AuthWrapper({
   const loadUser = async () => {
     try {
       setLoading(true);
-      
+
       if (!isAuthenticated) {
-        const user = await apiCall({
-          method: requestTypes.GET,
-          url: `${AUTH_API_BASE_PATH}/status`,
-        });
+        const user = await apiCall(
+          {
+            method: requestTypes.GET,
+            url: `${AUTH_API_BASE_PATH}/status`,
+          },
+          AUTH_PORT
+        );
         if (user) {
           dispatch(setUser(user));
         }
@@ -61,6 +64,6 @@ export default function AuthWrapper({
   // if (loading && !redirected.current) {
   //   return <Loader />;
   // }
-  
+
   return <>{children}</>;
 }
