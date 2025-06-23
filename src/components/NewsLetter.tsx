@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "./button";
 
 const NewsLetter = () => {
   return (
@@ -16,9 +17,9 @@ const NewsLetter = () => {
           type="text"
           placeholder="Enter your email id"
         />
-        <button className="md:px-12 px-8 h-full text-white bg-orange-600 rounded-md rounded-l-none">
+        <Button classname="md:px-12 px-8 h-full text-white bg-orange-600 rounded-md rounded-l-none">
           Subscribe
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -1,11 +1,29 @@
-"use client"
+"use client";
 import React, { Fragment } from "react";
 import { assets } from "@/assets/assets";
 import Link from "next/link";
 import Image from "next/image";
 import Button from "./button";
+import { useLogout } from "@/hooks/auth/useLogin";
+import { useRouter } from "next/navigation";
+import { removeUser } from "@/redux/slices/userSlice";
+import { useAppDispatch } from "@/redux/store";
+import { useSelector } from "react-redux";
+// import { cookies } from "next/headers";
 
 const Navbar = ({ isAdmin }: { isAdmin?: Boolean }) => {
+  const { getLogout, loading: logoutLoader } = useLogout();
+  const router = useRouter();
+  const user = useSelector((state: any) => state.user);
+  const dispatch = useAppDispatch();
+  const logout = async () => {
+    if (user.isAuthenticated) {
+      await getLogout();
+      dispatch(removeUser());
+    }
+    router.push("/login");
+  };
+
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 border-b border-gray-300 text-gray-700">
       <Image
@@ -16,8 +34,10 @@ const Navbar = ({ isAdmin }: { isAdmin?: Boolean }) => {
       {isAdmin ? (
         <Button
           type="button"
-          classname="bg-gray-600 text-white px-5 py-2 sm:px-7 sm:py-2 rounded-full text-xs sm:text-sm"
-          onlyDisable={false}
+          classname="bg-gray-600 text-white px-5 py-2 sm:px-7 sm:py-2 rounded-full text-xs sm:text-sm cursor-pointer"
+          onlyDisable={logoutLoader}
+          onClickHandler={() => logout()}
+          loader={true}
         >
           Log out
         </Button>
@@ -47,18 +67,22 @@ const Navbar = ({ isAdmin }: { isAdmin?: Boolean }) => {
               src={assets.search_icon}
               alt="search icon"
             />
-            <button className="flex items-center gap-2 hover:text-gray-900 transition">
-              <Image src={assets.user_icon} alt="user icon" />
-              Account
-            </button>
+            <Button classname=" hover:text-gray-900 transition">
+              <div className="flex items-center gap-2">
+                <Image src={assets.user_icon} alt="user icon" />
+                <span>Account</span>
+              </div>
+            </Button>
+            <Button
+              type="button"
+              classname="bg-gray-600 text-white px-5 py-2 sm:px-7 sm:py-2 rounded-full text-xs sm:text-sm cursor-pointer"
+              onlyDisable={logoutLoader}
+              onClickHandler={() => logout()}
+              loader={true}
+            >
+              {!user.isAuthenticated ? "Login" : "Log out"}
+            </Button>
           </ul>
-
-          <div className="flex items-center md:hidden gap-3">
-            <button className="flex items-center gap-2 hover:text-gray-900 transition">
-              <Image src={assets.user_icon} alt="user icon" />
-              Account
-            </button>
-          </div>
         </Fragment>
       )}
     </nav>

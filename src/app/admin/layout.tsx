@@ -1,5 +1,6 @@
+
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import SideBar from "@/components/Sidebar";
 import React from "react";
 
 interface LayoutType {
@@ -10,7 +11,7 @@ const Layout = ({ children }: LayoutType) => {
     <div>
       <Navbar isAdmin={true}/>
       <div className="flex w-full">
-        <Sidebar />
+        <SideBar />
         {children}
       </div>
     </div>

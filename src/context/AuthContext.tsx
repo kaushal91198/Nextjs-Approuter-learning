@@ -9,32 +9,29 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-export default function AuthWrapper({
+export default function AuthContext({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const dispatch: AppDispatch = useAppDispatch();
-  const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated } = useSelector((state: RootState) => state.user);
   const [loading, setLoading] = useState(true);
   const redirected = useRef(false);
 
   useEffect(() => {
-    // if (pathname === "/login") {
-    //   console.log("smdjknkn")
-    //   setLoading(false);
-    //   return;
-    // }
-    // loadUser();
+    if (pathname === "/login") {
+      setLoading(false);
+      return;
+    }
+    loadUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadUser = async () => {
     try {
       setLoading(true);
-
       if (!isAuthenticated) {
         const user = await apiCall(
           {
@@ -47,23 +44,14 @@ export default function AuthWrapper({
           dispatch(setUser(user));
         }
       }
-
       setLoading(false);
-    } catch (error: any) {
-      if (
-        error?.message === "Unauthorized: Please log in." &&
-        !redirected.current
-      ) {
-        redirected.current = true; // prevent double redirect
-        router.push("/login");
-      }
-    }
+    } catch (error: any) {}
   };
 
   // Show loader until loading is finished or redirected
-  // if (loading && !redirected.current) {
-  //   return <Loader />;
-  // }
+  if (loading && !redirected.current) {
+    return <Loader />;
+  }
 
   return <>{children}</>;
 }

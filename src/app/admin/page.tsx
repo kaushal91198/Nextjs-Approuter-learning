@@ -8,7 +8,7 @@ import { productSchema } from "@/validationSchema/product.schema";
 import CustomSelect from "@/components/CustomSelect";
 import TextArea from "@/components/TextArea";
 import FileUpload from "@/components/FileUpload";
-import { useProduct, getCategory } from "./hooks/useProduct";
+import { useProduct, getCategory } from "../../hooks/admin/useProduct";
 import { useEffect } from "react";
 import Button from "@/components/button";
 
@@ -65,7 +65,6 @@ const AddProduct = () => {
     setValue("images", images);
   };
 
-  console.log(categoryData, "jhbbvhjvb");
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
       <form onSubmit={handleProduct} className="md:p-10 p-4 space-y-5 max-w-lg">
@@ -116,54 +115,56 @@ const AddProduct = () => {
             maxFiles={5}
           />
         </div>
-        <div className="flex items-center gap-5 flex-wrap">
-          <div className="flex flex-col gap-1 ">
-            <label className="text-base font-medium" htmlFor="category">
-              Category
-            </label>
-            <CustomSelect<ProductFormFields>
-              placeholder="Choose category"
-              name="category_id"
-              register={register}
-              error={errors.category_id}
-              parentClass="mb-30px last:mb-0"
-              options={(categoryData?.data || []).map((category: any) => {
-                return {
-                  value: category._id,
-                  label: category.name,
-                };
-              })}
-              control={control}
-              inputClass="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            />
+        {!categoryLoader && (
+          <div className="flex items-center gap-5 flex-wrap">
+            <div className="flex flex-col gap-1 ">
+              <label className="text-base font-medium" htmlFor="category">
+                Category
+              </label>
+              <CustomSelect<ProductFormFields>
+                placeholder="Choose category"
+                name="category_id"
+                register={register}
+                error={errors.category_id}
+                parentClass="mb-30px last:mb-0"
+                options={(categoryData?.data || []).map((category: any) => {
+                  return {
+                    value: category._id,
+                    label: category.name,
+                  };
+                })}
+                control={control}
+                inputClass="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+              />
+            </div>
+            <div className="flex flex-col gap-1 ">
+              <label className="text-base font-medium" htmlFor="product-price">
+                Product Price
+              </label>
+              <Input<ProductFormFields>
+                name="price"
+                register={register}
+                error={errors.price}
+                placeholder="Price"
+                type="number"
+                inputClass="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-base font-medium" htmlFor="offer-price">
+                Offer Price
+              </label>
+              <Input<ProductFormFields>
+                name="offer_price"
+                register={register}
+                error={errors.offer_price}
+                placeholder="Offer Price"
+                type="number"
+                inputClass="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+              />
+            </div>
           </div>
-          <div className="flex flex-col gap-1 ">
-            <label className="text-base font-medium" htmlFor="product-price">
-              Product Price
-            </label>
-            <Input<ProductFormFields>
-              name="price"
-              register={register}
-              error={errors.price}
-              placeholder="Price"
-              type="number"
-              inputClass="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-base font-medium" htmlFor="offer-price">
-              Offer Price
-            </label>
-            <Input<ProductFormFields>
-              name="offer_price"
-              register={register}
-              error={errors.offer_price}
-              placeholder="Offer Price"
-              type="number"
-              inputClass="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-            />
-          </div>
-        </div>
+        )}
         <Button
           type="submit"
           classname="px-8 py-2.5 bg-orange-600 text-white font-medium rounded"

@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { loginSchema } from "@/validationSchema/login.schema";
 import Button from "@/components/button";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { usePostLogin } from "./hooks/useLogin";
+import { useLogin } from "../../hooks/auth/useLogin";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/slices/userSlice";
@@ -17,7 +17,7 @@ import { assets } from "@/assets/assets";
 
 const Login = () => {
   const router = useRouter();
-  const { postLogin, loading: postLoader } = usePostLogin();
+  const { postLogin, loading: postLoader } = useLogin();
   const dispatch: AppDispatch = useDispatch();
   const {
     register,
@@ -31,9 +31,12 @@ const Login = () => {
     try {
       const userDetail = await postLogin(value);
       dispatch(setUser(userDetail));
-      router.push("/");
+      if (userDetail.roles.includes("admin")) {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
     } catch (error) {
-      console.log(error);
     }
   });
   return (
@@ -50,7 +53,6 @@ const Login = () => {
         <p className="text-sm text-gray-500 mb-6">
           Welcome back! Please sign in to continue
         </p>
-
         <form className="flex flex-col gap-5" onSubmit={handleLogin}>
           <div>
             <label
