@@ -1,7 +1,8 @@
 
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { NEXT_PUBLIC_API_URL } from "../config";
 import { AUTH_API_BASE_PATH } from "@/constant/apiEndPoint.constant";
+import { redirect } from "next/navigation";
+import { NEXT_PUBLIC_API_URL } from "@/config";
 
 export const requestTypes = {
   POST: "POST",
@@ -10,9 +11,9 @@ export const requestTypes = {
 };
 
 
-async function sendRequest(axiosInstance: AxiosInstance, config: AxiosRequestConfig) {
+export async function sendRequest(axiosInstance: AxiosInstance, config: AxiosRequestConfig) {
   return await axiosInstance.request({
-    url: NEXT_PUBLIC_API_URL + config.url,
+    url: `${NEXT_PUBLIC_API_URL}${config.url}`,
     method: config.method,
     data: config.data,
     params: config.params,
@@ -20,10 +21,11 @@ async function sendRequest(axiosInstance: AxiosInstance, config: AxiosRequestCon
   });
 }
 
-async function generateAccessToken(axiosInstance: AxiosInstance) {
+export async function generateAccessToken(axiosInstance: AxiosInstance, headers: any = {},) {
   await sendRequest(axiosInstance, {
     method: requestTypes.GET,
     url: `${AUTH_API_BASE_PATH}/refresh-token`,
+    headers
   });
 }
 
@@ -33,7 +35,6 @@ export async function apiCall(config: AxiosRequestConfig) {
     withCredentials: true,
   });
   try {
-    console.log("api call function")
     const res = await sendRequest(axiosInstance, config)
     return res.data;
 
@@ -47,13 +48,16 @@ export async function apiCall(config: AxiosRequestConfig) {
           break;
         case 401:
           try {
-            console.log("first call")
             await generateAccessToken(axiosInstance);
-            console.log("second call")
             const res = await sendRequest(axiosInstance, config)
-            console.log("third call")
             return res.data;
           } catch (error) {
+            if (typeof window !== 'undefined') {
+              window.location.href = '/login';
+            }
+            else {
+              redirect('/login')
+            }
             message = "Unauthorized: Please log in.";
             break;
           }
