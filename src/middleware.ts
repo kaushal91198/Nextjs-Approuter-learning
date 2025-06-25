@@ -5,6 +5,7 @@ import { AUTH_API_BASE_PATH, AUTH_PORT } from "./constant/apiEndPoint.constant";
 import axios from "axios";
 
 export async function middleware(req: NextRequest) {
+  console.log("middleware Called called")
   const axiosInstance = axios.create({});
   const cookieStore = await cookies();
   const cookieHeader = cookieStore
@@ -28,7 +29,7 @@ export async function middleware(req: NextRequest) {
     });
 
     if (pathname.includes("admin") && !res.data.roles.includes('admin')) {
-      return NextResponse.redirect(new URL("/", req.url));
+      // return NextResponse.redirect(new URL("/", req.url));
     }
     return response
   } catch (error: any) {
@@ -42,13 +43,13 @@ export async function middleware(req: NextRequest) {
       catch (e: any) {
         if (pathname !== '/login') {
           cookieStore.delete("user");
-          return NextResponse.redirect(new URL('/login', req.url));
+          // return NextResponse.redirect(new URL('/login', req.url));
         }
       }
     }
     if (pathname !== '/login') {
       cookieStore.delete("user");
-      return NextResponse.redirect(new URL('/login', req.url));
+      // return NextResponse.redirect(new URL('/login', req.url));
     }
     return NextResponse.next()
   }
@@ -60,6 +61,7 @@ export const config = {
      * Protect only specific routes:
      * - all app routes except: /login, /_next/, /api/, etc.
      */
-    '/((?!_next|favicon.ico|api|static).*)',
+    // '/((?!_next|favicon.ico|api|static).*)',
+    '/admin/:path*',
   ],
 };

@@ -5,6 +5,7 @@ export interface ToastInterface {
 
 
 export interface UserState {
-    user: any;
-    isAuthenticated: boolean;
+  user: any;
+  isAuthenticated: boolean;
+  redirectUrl?: string
 }

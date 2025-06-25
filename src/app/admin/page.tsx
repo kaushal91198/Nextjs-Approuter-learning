@@ -1,5 +1,4 @@
 "use client";
-import { assets } from "@/assets/assets";
 import Input from "@/components/input";
 import { ProductFormFields } from "./types";
 import { useForm } from "react-hook-form";
@@ -8,7 +7,7 @@ import { productSchema } from "@/validationSchema/product.schema";
 import CustomSelect from "@/components/CustomSelect";
 import TextArea from "@/components/TextArea";
 import FileUpload from "@/components/FileUpload";
-import { useProduct, getCategory } from "../../hooks/admin/useProduct";
+import { useProduct, getCategory } from "../../hooks/product/useProduct";
 import { useEffect } from "react";
 import Button from "@/components/button";
 

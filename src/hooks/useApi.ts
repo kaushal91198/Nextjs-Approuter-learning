@@ -4,7 +4,7 @@ import { apiCall } from "@/axios";
 import { useState } from "react";
 
 const useApi = (Service: string, config = {}) => {
-  const [state, setState] = useState({ loading: false, error: null, data: null });
+  const [state, setState] = useState<{ loading: boolean, error: any, data: any }>({ loading: false, error: null, data: null });
 
   const makeApiCall = (additionalConfig = {}) => {
     setState((old) => ({

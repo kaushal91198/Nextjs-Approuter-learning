@@ -9,7 +9,7 @@ import Button from "@/components/button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useLogin } from "../../hooks/auth/useLogin";
 import { AppDispatch } from "@/redux/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/slices/userSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -18,6 +18,7 @@ import { assets } from "@/assets/assets";
 const Login = () => {
   const router = useRouter();
   const { postLogin, loading: postLoader } = useLogin();
+  const redirectUrl = useSelector((state: any) => state.user.redirectUrl);
   const dispatch: AppDispatch = useDispatch();
   const {
     register,
@@ -34,7 +35,7 @@ const Login = () => {
       if (userDetail.roles.includes("admin")) {
         router.push("/admin");
       } else {
-        router.push("/");
+        router.push(redirectUrl);
       }
     } catch (error) {
     }

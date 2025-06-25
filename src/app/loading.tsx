@@ -10,7 +10,6 @@ export default function Loader() {
         </div>
       </div>
       <p className="absolute bottom-12 text-gray-700 font-medium text-lg animate-pulse">
-        Checking Auth...
       </p>
     </div>
   );

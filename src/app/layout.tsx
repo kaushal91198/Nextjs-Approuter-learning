@@ -27,7 +27,6 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const userCookie = cookieStore.get("user");
-  console.log(userCookie,"kjbhjbj")
   return (
     <html lang="en">
       <body
