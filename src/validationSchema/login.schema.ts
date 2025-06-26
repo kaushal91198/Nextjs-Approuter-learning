@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import {
   LoginSchemaError,
-  SignupError,
+  // SignupError,
 } from "../constant/formErrorMessage.constant";
 
 export const loginSchema = yup

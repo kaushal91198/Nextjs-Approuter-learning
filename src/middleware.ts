@@ -28,7 +28,6 @@ export async function middleware(req: NextRequest) {
     });
     return response
   } catch (error: any) {
-    console.log(error,"njbjb")
     if (error.status === 401) {
       try {
         await generateAccessToken(axiosInstance, {
@@ -36,7 +35,7 @@ export async function middleware(req: NextRequest) {
         });
         await sendRequest(axiosInstance, config)
       }
-      catch (e: any) {
+      catch (e:any) {
         if (pathname !== '/login') {
           cookieStore.delete("user");
           return NextResponse.redirect(new URL('/login', req.url));

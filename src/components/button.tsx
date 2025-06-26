@@ -15,6 +15,7 @@ interface ButtonProps {
 }
 
 const Button = (props: ButtonProps) => {
+
   return (
     <>
       <div className={`${props.parentClass ? props.parentClass : ""}`}>

@@ -29,17 +29,17 @@ const Input = <TForm extends Record<string, unknown>>(
 ) => {
   const {
     parentClass,
-    label,
+    // label,
     inputClass,
-    labelClass,
+    // labelClass,
     type,
     name,
     placeholder,
     register,
     error,
     onChange,
-    setViewPassword,
-    viewPassword,
+    // setViewPassword,
+    // viewPassword,
     ...rest
   } = props;
 
