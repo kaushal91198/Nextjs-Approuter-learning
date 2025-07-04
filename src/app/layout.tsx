@@ -25,6 +25,7 @@ export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  modal: any;
 }>) {
   const cookieStore = await cookies();
   const userCookie = cookieStore.get("user");

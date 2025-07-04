@@ -19,35 +19,35 @@ export async function middleware(req: NextRequest) {
     }
   }
   const { pathname } = req.nextUrl;
-  try {
-    const res = await sendRequest(axiosInstance, config)
-    const response = NextResponse.next();
-    response.cookies.set("user", JSON.stringify(res.data), {
-      httpOnly: true,
-      secure: true
-    });
-    return response
-  } catch (error: any) {
-    if (error.status === 401) {
-      try {
-        await generateAccessToken(axiosInstance, {
-          Cookie: cookieHeader
-        });
-        await sendRequest(axiosInstance, config)
-      }
-      catch (e:any) {
-        if (pathname !== '/login') {
-          cookieStore.delete("user");
-          return NextResponse.redirect(new URL('/login', req.url));
-        }
-      }
-    }
-    if (pathname !== '/login') {
-      cookieStore.delete("user");
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
-    return NextResponse.next()
-  }
+  // try {
+  //   const res = await sendRequest(axiosInstance, config)
+  //   const response = NextResponse.next();
+  //   response.cookies.set("user", JSON.stringify(res.data), {
+  //     httpOnly: true,
+  //     secure: true
+  //   });
+  //   return response
+  // } catch (error: any) {
+  //   if (error.status === 401) {
+  //     try {
+  //       await generateAccessToken(axiosInstance, {
+  //         Cookie: cookieHeader
+  //       });
+  //       await sendRequest(axiosInstance, config)
+  //     }
+  //     catch (e:any) {
+  //       if (pathname !== '/login') {
+  //         cookieStore.delete("user");
+  //         return NextResponse.redirect(new URL('/login', req.url));
+  //       }
+  //     }
+  //   }
+  //   if (pathname !== '/login') {
+  //     cookieStore.delete("user");
+  //     return NextResponse.redirect(new URL('/login', req.url));
+  //   }
+  //   return NextResponse.next()
+  // }
 }
 
 export const config = {

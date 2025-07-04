@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { apiCall, requestTypes } from "@/axios";
 import { AUTH_API_BASE_PATH } from "@/constant/apiEndPoint.constant";
 import { removeUser } from "@/redux/slices/userSlice";
+import Link from "next/link";
 
 export default function DashboardPage() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -26,6 +27,12 @@ export default function DashboardPage() {
   };
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-10">
+      <Link
+        href="/signup"
+        className="bg-black text-white px-4 py-2 font-semibold rounded-sm"
+      >
+        Login
+      </Link>
       <div className="max-w-5xl mx-auto space-y-8">
         <header className="flex justify-between items-center">
           <div>
